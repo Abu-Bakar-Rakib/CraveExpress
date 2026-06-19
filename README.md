@@ -28,6 +28,7 @@ CraveExpress is a full-stack web application built with Django and Django REST F
 - **Package Manager**: pip (included with Python)
 
 All Python dependencies are specified in `requirements.txt` and include Django 5.2.x, Django REST Framework, SimpleJWT, Pillow, NumPy, and Shapely.
+<img width="928" height="476" alt="image" src="https://github.com/user-attachments/assets/98f4812d-c31a-498c-a1f9-7f6d03fd6d98" />
 
 ## Installation & Setup
 
