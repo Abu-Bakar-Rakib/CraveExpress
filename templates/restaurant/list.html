@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Restaurants - CraveExpress{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="py-5 text-center" style="background: linear-gradient(135deg, var(--bg-light) 0%, #e2e8f0 100%); border-bottom: 1px solid rgba(0,0,0,0.05);">
+    <div class="container">
+        <h1 class="fw-bold" style="font-size: 3rem; margin-bottom: 0.5rem;"><i class="fa-solid fa-utensils" style="color: var(--accent);"></i> Our Restaurants</h1>
+        <p class="text-muted" style="font-size: 1.2rem;">Discover amazing food from top-rated spots in your city.</p>
+    </div>
+</div>
+
+<div class="container py-5">
+    <div class="grid-3">
+        {% for r in restaurants %}
+            <div class="restaurant-card">
+                <div class="restaurant-image">
+                    {% if r.image %}
+                        <img src="{{ r.image.url }}" alt="{{ r.name }}">
+                    {% else %}
+                        <div class="restaurant-placeholder">
+                            <span class="restaurant-icon">🍽️</span>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="restaurant-info">
+                    <h3>{{ r.name }}</h3>
+                    <p>{{ r.description|truncatechars:100 }}</p>
+                    <a href="{% url 'restaurant_detail' r.id %}" class="btn btn-primary" style="width: 100%;">
+                        View Menu <i class="fa-solid fa-arrow-right" style="font-size: 0.8rem;"></i>
+                    </a>
+                </div>
+            </div>
+        {% empty %}
+            <div style="grid-column: 1/-1; text-align: center; padding: 4rem; background: var(--bg-white); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm);">
+                <i class="fa-solid fa-store-slash" style="font-size: 4rem; color: var(--text-muted); margin-bottom: 1rem;"></i>
+                <h3 class="mb-2">No Restaurants Found</h3>
+                <p class="text-muted">Check back later or try adjusting your search criteria.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

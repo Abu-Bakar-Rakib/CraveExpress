@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Food Delivery System{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@500;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="glass-header">
+        <nav class="main-nav">
+            <a href="{% url 'home' %}" class="logo">
+                <i class="fa-solid fa-burger"></i>
+                <span>CraveExpress</span>
+            </a>
+            
+            <div class="nav-center">
+                <form method="get" action="{% url 'search' %}" class="search-bar">
+                    <i class="fa-solid fa-search search-icon"></i>
+                    <input type="search" name="q" placeholder="What are you craving?">
+                </form>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="{% url 'home' %}" class="nav-item"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="{% url 'restaurant_list' %}" class="nav-item"><i class="fa-solid fa-store"></i> Restaurants</a></li>
+                <li><a href="{% url 'view_cart' %}" class="nav-item"><i class="fa-solid fa-cart-shopping"></i> Cart</a></li>
+                
+                {% if user.is_authenticated %}
+                    <li class="nav-dropdown-wrapper">
+                        <a href="{% url 'profile' %}" class="nav-item user-menu">
+                            <i class="fa-solid fa-user-circle"></i> {{ user.username }}
+                        </a>
+                    </li>
+                    
+                    {% if user.user_type == 'admin' %}
+                        <li><a href="/admin/" class="nav-item"><i class="fa-solid fa-gear"></i> Admin</a></li>
+                    {% elif user.user_type == 'delivery' %}
+                        <li><a href="{% url 'delivery_dashboard' %}" class="nav-item"><i class="fa-solid fa-truck"></i> Delivery</a></li>
+                    {% else %}
+                        <li><a href="{% url 'customer_dashboard' %}" class="nav-item"><i class="fa-solid fa-clipboard-list"></i> Orders</a></li>
+                    {% endif %}
+                    
+                    <li>
+                        <form method="post" action="{% url 'logout' %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn-outline-nav">Logout</button>
+                        </form>
+                    </li>
+                {% else %}
+                    <li><a href="{% url 'login' %}" class="btn-outline-nav">Login</a></li>
+                    <li><a href="{% url 'register' %}" class="btn-primary-nav">Sign Up</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <main class="main-content">
+        <!-- Messages -->
+        {% if messages %}
+        <div class="container messages-container">
+            {% for message in messages %}
+            <div class="message {{ message.tags }}">
+                <i class="fa-solid {% if message.tags == 'success' %}fa-check-circle{% elif message.tags == 'error' %}fa-circle-exclamation{% else %}fa-info-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer class="modern-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="logo-footer">
+                    <i class="fa-solid fa-burger"></i> CraveExpress
+                </div>
+                <p>The fastest food delivery in the city. Fresh ingredients, lightning speed.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Quick Links</h4>
+                <a href="{% url 'home' %}">Home</a>
+                <a href="{% url 'restaurant_list' %}">Restaurants</a>
+                <a href="#">About Us</a>
+            </div>
+            <div class="footer-social">
+                <h4>Follow Us</h4>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 CraveExpress. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

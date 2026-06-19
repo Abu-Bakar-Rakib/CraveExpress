@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Add Address</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><input name="address_line" placeholder="Address line" required></p>
+        <p><input name="city" placeholder="City" required></p>
+        <p><input name="state" placeholder="State" required></p>
+        <p><input name="postal_code" placeholder="Postal Code" required></p>
+        <p><input name="latitude" placeholder="Latitude (optional)" type="number" step="0.000001"></p>
+        <p><input name="longitude" placeholder="Longitude (optional)" type="number" step="0.000001"></p>
+        <button type="submit">Save</button>
+    </form>
+    <p><a href="{% url 'profile' %}">Back to profile</a></p>
+</div>
+{% endblock %}
+
+

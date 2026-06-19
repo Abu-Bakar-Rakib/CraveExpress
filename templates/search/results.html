@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Search</h2>
+    <form method="get" action="{% url 'search' %}">
+        <input type="search" name="q" value="{{ q }}" placeholder="Search restaurants and items...">
+        <select name="category">
+            <option value="">All</option>
+            <option value="food" {% if category == 'food' %}selected{% endif %}>Food</option>
+            <option value="drink" {% if category == 'drink' %}selected{% endif %}>Drink</option>
+            <option value="dessert" {% if category == 'dessert' %}selected{% endif %}>Dessert</option>
+            <option value="combo" {% if category == 'combo' %}selected{% endif %}>Combo</option>
+        </select>
+        <input type="number" step="0.01" name="min_price" value="{{ min_price }}" placeholder="Min price" style="width:100px;">
+        <input type="number" step="0.01" name="max_price" value="{{ max_price }}" placeholder="Max price" style="width:100px;">
+        <button type="submit">Search</button>
+    </form>
+
+    <h3>Restaurants</h3>
+    <ul>
+        {% for r in restaurants %}
+            <li><a href="{% url 'restaurant_detail' r.id %}">{{ r.name }}</a></li>
+        {% empty %}
+            <li>No restaurants found.</li>
+        {% endfor %}
+    </ul>
+
+    <h3>Menu Items</h3>
+    <ul>
+        {% for m in menu_items %}
+            <li>
+                {{ m.name }} ({{ m.get_category_display }}) - {{ m.price }} at
+                <a href="{% url 'restaurant_detail' m.restaurant.id %}">{{ m.restaurant.name }}</a>
+            </li>
+        {% empty %}
+            <li>No menu items found.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}
+
+

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h2>🍽️ {{ restaurant.name }}</h2>
+            <p>{{ restaurant.description }}</p>
+        </div>
+        <div class="card-body">
+            <div class="restaurant-image" style="width:100%;height:300px;margin-bottom:2rem;">
+                {% if restaurant.image %}
+                    <img src="{{ restaurant.image.url }}" alt="{{ restaurant.name }}" style="width:100%;height:100%;object-fit:cover;">
+                {% else %}
+                    <div class="restaurant-placeholder">
+                        <span class="restaurant-icon">🍽️</span>
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="filters">
+                <input type="search" name="q" value="{{ request.GET.q }}" placeholder="🔍 Search menu...">
+                <select name="category">
+                    <option value="">All Categories</option>
+                    <option value="food" {% if category == 'food' %}selected{% endif %}>🍕 Food</option>
+                    <option value="drink" {% if category == 'drink' %}selected{% endif %}>🥤 Drinks</option>
+                    <option value="dessert" {% if category == 'dessert' %}selected{% endif %}>🍰 Desserts</option>
+                    <option value="combo" {% if category == 'combo' %}selected{% endif %}>🍱 Combos</option>
+                </select>
+                <input type="number" step="0.01" name="min_price" value="{{ min_price }}" placeholder="Min price">
+                <input type="number" step="0.01" name="max_price" value="{{ max_price }}" placeholder="Max price">
+                <button type="submit">Search</button>
+            </div>
+            
+            <h3 style="margin:2rem 0 1rem 0;color:#333;">📋 Menu Items</h3>
+            <div class="menu-grid">
+                {% for m in menu_items %}
+                    <div class="menu-item">
+                        <div class="menu-item-image">
+                            {% if m.image %}
+                                <img src="{{ m.image.url }}" alt="{{ m.name }}" style="width:100%;height:100%;object-fit:cover;">
+                            {% else %}
+                                <div class="menu-item-placeholder">
+                                    <span class="menu-item-icon">🍽️</span>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="menu-item-info">
+                            <div class="menu-item-name">{{ m.name }}</div>
+                            <div class="menu-item-category">{{ m.get_category_display }}</div>
+                            <div class="menu-item-price">${{ m.price }}</div>
+                            <form method="post" action="{% url 'add_to_cart' m.id %}" class="menu-item-form">
+                                {% csrf_token %}
+                                <input type="number" name="qty" value="1" min="1">
+                                <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                {% empty %}
+                    <div class="card">
+                        <div class="card-body">
+                            <p>No items available matching your criteria.</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div style="text-align:center;margin:2rem 0;">
+                <a href="{% url 'view_cart' %}" class="btn btn-primary">🛒 View Cart</a>
+                {% if user.is_staff %}
+                <a href="{% url 'upload_restaurant_image' restaurant.id %}" class="btn btn-outline">📷 Upload Restaurant Image</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
