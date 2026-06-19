@@ -1,107 +1,257 @@
-# TestProject (Django)
+# CraveExpress
 
-A Django-based web app with restaurant browsing, menu items, cart/checkout, delivery, and basic payment integration. Includes admin dashboards for staff, customer and delivery views, and demo seed data for easy local testing.
+A modern Django-based food delivery platform with comprehensive features for restaurant management, customer ordering, and real-time delivery tracking. The application includes role-based dashboards for administrators, customers, and delivery personnel.
 
-## Features
-- Restaurant listing and details (`templates/restaurant/`)
-- Menu items, cart, and checkout (`templates/cart/`, `templates/checkout/`)
-- Customer, delivery, and admin dashboards (`templates/customer/`, `templates/delivery/`, `templates/admin/`)
-- Authentication with login and phone verification (`templates/auth/`)
-- Image uploads to `media/`
-- Admin site at `/admin/`
+## Overview
 
-## Requirements
-- Python 3.10+ (Windows supported)
-- pip (comes with Python)
-- SQLite (bundled, no setup needed)
+CraveExpress is a full-stack web application built with Django and Django REST Framework, designed to streamline the food delivery experience. It provides a seamless platform for browsing restaurants, managing orders, tracking deliveries, and processing payments.
 
-Python dependencies are pinned in `requirements.txt` (Django 5.2.x, DRF, SimpleJWT, Pillow, NumPy, Shapely, etc.).
+## Key Features
 
-## Quick Start (Windows PowerShell)
-```powershell
-# From project root
-cd E:\Code\Python\TestProject
+- **Restaurant Management**: Browse, search, and view detailed restaurant information
+- **Menu Management**: Complete menu item catalog with descriptions and pricing
+- **Shopping Cart & Checkout**: Intuitive cart management and secure checkout process
+- **Order Management**: Real-time order tracking and status updates
+- **User Authentication**: Secure login with phone verification capabilities
+- **Role-Based Access Control**: 
+  - Customer Dashboard: Order history, tracking, and account management
+  - Delivery Personnel Dashboard: Active deliveries and route optimization
+  - Admin Dashboard: Restaurant and order management, analytics
+- **Payment Integration**: Basic payment gateway integration for order processing
+- **Media Management**: Efficient image storage for restaurants and products
 
-# 1) Create & activate virtualenv (skip if venv/ already exists)
-python -m venv venv
-.\venv\Scripts\Activate.ps1
+## System Requirements
 
-# 2) Install dependencies
-pip install -r requirements.txt
+- **Python**: 3.10 or higher
+- **Database**: SQLite (included, no additional setup required)
+- **Operating System**: Windows, macOS, or Linux
+- **Package Manager**: pip (included with Python)
 
-# 3) Database migrations
-python manage.py migrate
+All Python dependencies are specified in `requirements.txt` and include Django 5.2.x, Django REST Framework, SimpleJWT, Pillow, NumPy, and Shapely.
 
-# 4) Create an admin user
-python manage.py createsuperuser
+## Installation & Setup
 
-# 5) (Optional) Load demo data
-python manage.py seed_demo
+### Prerequisites
+Ensure Python 3.10+ is installed on your system.
 
-# 6) Run the server
-python manage.py runserver
+### Step-by-Step Guide
+
+1. **Clone the Repository**
+   ```bash
+   git clone https://github.com/Abu-Bakar-Rakib/CraveExpress.git
+   cd CraveExpress
+   ```
+
+2. **Create and Activate Virtual Environment**
+   ```bash
+   # Create virtual environment
+   python -m venv venv
+   
+   # Activate (Windows)
+   .\venv\Scripts\Activate.ps1
+   
+   # Activate (macOS/Linux)
+   source venv/bin/activate
+   ```
+   > **Note**: On Windows, if you encounter an execution policy error, run:
+   > ```powershell
+   > Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+   > ```
+
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Configure Database**
+   ```bash
+   # Apply migrations
+   python manage.py migrate
+   
+   # Create superuser account
+   python manage.py createsuperuser
+   ```
+
+5. **Load Demo Data (Optional)**
+   ```bash
+   python manage.py seed_demo
+   ```
+
+6. **Start Development Server**
+   ```bash
+   python manage.py runserver
+   ```
+
+7. **Access the Application**
+   - Application: http://127.0.0.1:8000/
+   - Admin Panel: http://127.0.0.1:8000/admin/
+
+## Project Structure
+
 ```
-Now open `http://127.0.0.1:8000/` in your browser. The admin is at `http://127.0.0.1:8000/admin/`.
-
-## Project Structure (high level)
-```
-TestProject/
-  manage.py
-  requirements.txt
-  testproject/            # Django project settings
-  main/                   # Main app: models, views, urls, mgmt commands
-  templates/              # HTML templates (home, auth, restaurant, cart, etc.)
-  static/                 # CSS/JS/images (served in development)
-  media/                  # Uploaded images (e.g. restaurant images)
-  db.sqlite3              # SQLite database (local dev)
-  venv/                   # Virtual environment (local-only)
+CraveExpress/
+├── manage.py                    # Django management script
+├── requirements.txt             # Python dependencies
+├── db.sqlite3                   # Local SQLite database
+├── cravelexpress/              # Django project configuration
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── main/                        # Core application
+│   ├── models.py               # Database models
+│   ├── views.py                # View logic
+│   ├── urls.py                 # URL routing
+│   ├── serializers.py          # DRF serializers
+│   └── management/
+│       └── commands/           # Custom management commands
+├── templates/                   # HTML templates
+│   ├── auth/                   # Authentication pages
+│   ├── restaurant/             # Restaurant pages
+│   ├── cart/                   # Shopping cart
+│   ├── checkout/               # Checkout process
+│   ├── customer/               # Customer dashboard
+│   ├── delivery/               # Delivery dashboard
+│   └── admin/                  # Admin dashboard
+├── static/                      # CSS, JavaScript, and static assets
+├── media/                       # User-uploaded content
+└── venv/                        # Virtual environment (local only)
 ```
 
 ## Common Commands
-```powershell
-# Run tests
-python manage.py test
 
-# Create a new app (example)
-python manage.py startapp myapp
-
-# Make and apply model changes
+### Database Management
+```bash
+# Create migrations for model changes
 python manage.py makemigrations
+
+# Apply pending migrations
 python manage.py migrate
 
-# Collect static files for production (optional)
+# View migration status
+python manage.py showmigrations
+```
+
+### Testing
+```bash
+# Run all tests
+python manage.py test
+
+# Run tests for specific app
+python manage.py test main
+
+# Run with verbose output
+python manage.py test --verbosity=2
+```
+
+### Static Files
+```bash
+# Collect static files for production
 python manage.py collectstatic
+
+# Clear static files
+python manage.py collectstatic --clear
+```
+
+### Utilities
+```bash
+# Create new Django app
+python manage.py startapp app_name
+
+# Load demo data
+python manage.py seed_demo
+
+# Interactive Python shell
+python manage.py shell
 ```
 
 ## Configuration
-The default settings module is `testproject.settings`.
 
-Environment variables you may want to set (optional):
-- `DEBUG` (default True in development): `True` or `False`
-- `SECRET_KEY`: set a strong secret for production
-- `ALLOWED_HOSTS`: e.g. `127.0.0.1,localhost`
+### Environment Settings
 
-If you use a `.env` file, ensure it is loaded (e.g., via `python-dotenv` or your own loader). This project works out-of-the-box with SQLite and the provided settings for local dev.
+The application uses `cravelexpress/settings.py` as the default settings module. Key configuration options:
 
-## Data & Media
-- User-uploaded images are stored under `media/`.
-- Example placeholder assets live under `static/`.
-- Demo content can be created with: `python manage.py seed_demo`.
+| Environment Variable | Purpose | Default |
+|---|---|---|
+| `DEBUG` | Debug mode (development only) | `True` |
+| `SECRET_KEY` | Django secret key (set for production) | Configured in settings |
+| `ALLOWED_HOSTS` | Allowed hostnames | `127.0.0.1,localhost` |
 
-## Troubleshooting (Windows)
-- Virtualenv activation policy error:
-  ```powershell
-  Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-  .\venv\Scripts\Activate.ps1
-  ```
-- SQLite locked error: stop other processes using `db.sqlite3`, then retry.
-- Pillow install issues: ensure you have a recent Python version (3.10+) and use the virtualenv. Wheels in `requirements.txt` should install automatically.
-- Shapely/NumPy slow install: prebuilt wheels are used; if it compiles, upgrade pip: `python -m pip install --upgrade pip` and retry.
-- Migrations not picked up: run `python manage.py makemigrations` then `python manage.py migrate`.
+### Using Environment Variables
 
-## Useful URLs
-- Home: `http://127.0.0.1:8000/`
-- Admin: `http://127.0.0.1:8000/admin/`
+To use a `.env` file for configuration:
+1. Install `python-dotenv`: `pip install python-dotenv`
+2. Create a `.env` file in the project root
+3. Load it in your settings or application startup
+
+### Production Deployment
+
+For production deployment:
+- Set `DEBUG = False`
+- Configure a strong `SECRET_KEY`
+- Use a production-grade database (PostgreSQL recommended)
+- Configure appropriate `ALLOWED_HOSTS`
+- Collect static files: `python manage.py collectstatic`
+
+## Media & Assets
+
+- **User Uploads**: Images are stored in `media/` directory
+- **Static Files**: CSS, JavaScript, and static assets in `static/` directory
+- **Demo Content**: Available through `python manage.py seed_demo` command
+
+## Troubleshooting
+
+### Windows-Specific Issues
+
+| Issue | Solution |
+|---|---|
+| Execution Policy Error | Run: `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` |
+| SQLite Database Locked | Ensure no other processes are using `db.sqlite3`, then retry operations |
+| Pillow Installation Issues | Use Python 3.10+ and ensure virtual environment is active |
+| Shapely/NumPy Installation Slow | Upgrade pip: `python -m pip install --upgrade pip` |
+| Migrations Not Applied | Run `python manage.py makemigrations` followed by `python manage.py migrate` |
+
+### General Troubleshooting
+
+- **Port Already in Use**: Run server on different port: `python manage.py runserver 8001`
+- **Module Not Found**: Verify virtual environment is activated and dependencies installed
+- **Database Migration Errors**: Reset database with `python manage.py flush` and reapply migrations
+
+## API Documentation
+
+The application provides REST API endpoints through Django REST Framework:
+
+- Authentication endpoints (login, logout, verification)
+- Restaurant browsing and filtering
+- Order management and tracking
+- User profile management
+
+Detailed API documentation available at `/api/` when running the development server.
+
+## Contributing
+
+To contribute to this project:
+
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add your feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Submit a Pull Request
 
 ## License
-This project is for learning/demo purposes. Add a LICENSE file if you plan to distribute.
+
+This project is provided for educational and demonstration purposes. Refer to the LICENSE file for complete terms. For commercial use, please contact the project maintainers.
+
+## Support
+
+For issues, questions, or suggestions:
+- Open an issue on GitHub
+- Review existing documentation
+- Check troubleshooting section above
+
+## Acknowledgments
+
+Built with:
+- [Django](https://www.djangoproject.com/) - Web framework
+- [Django REST Framework](https://www.django-rest-framework.org/) - REST API toolkit
+- [SimpleJWT](https://github.com/jpadilla/django-rest-framework-simplejwt) - JWT authentication
